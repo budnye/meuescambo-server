@@ -22,7 +22,13 @@ export class UserService {
     return user;
   }
 
-  async getUser() {
+  async getUsers() {
     return await this.UserRepository.find();
+  }
+
+  async getUser({ email }): Promise<UserEntity> {
+    const user = await this.UserRepository.findOne({ email });
+
+    return user;
   }
 }

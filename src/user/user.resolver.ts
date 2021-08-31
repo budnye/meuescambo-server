@@ -10,7 +10,7 @@ export class UserResolver {
 
   @Query(() => [CreateUserDto])
   async User() {
-    return this.userService.getUser();
+    return this.userService.getUsers();
   }
 
   @Mutation(() => CreateUserDto)
