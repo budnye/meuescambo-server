@@ -15,6 +15,7 @@ export class AuthResolver {
 
   @Mutation(() => LoginAuthDto)
   async login(@Args('data') data: inputAuth) {
-    return this.authService.validateUser(data);
+    const user = await this.authService.validate(data);
+    return this.authService.login(user);
   }
 }

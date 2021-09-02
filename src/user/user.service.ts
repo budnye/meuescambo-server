@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Context } from '@nestjs/graphql';
 
 @Injectable()
 export class UserService {
@@ -26,8 +27,14 @@ export class UserService {
     return await this.UserRepository.find();
   }
 
-  async getUser({ email }): Promise<UserEntity> {
-    const user = await this.UserRepository.findOne({ email });
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    const user = await this.UserRepository.findOne({ email: email });
+
+    return user;
+  }
+
+  async getUser(email: string): Promise<UserEntity> {
+    const user = await this.UserRepository.findOne({ email: email });
 
     return user;
   }
