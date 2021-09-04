@@ -11,7 +11,7 @@ import { CurrentUser } from './user.decorator';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(GqlAuthGuard)
+  // @UseGuards(GqlAuthGuard)
   @Query(() => [CreateUserDto])
   async getUsers() {
     return this.userService.getUsers();
