@@ -6,6 +6,8 @@ import { inputUser } from './inputs/user.input';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from 'src/auth/guards/jql-auth.guard';
 import { CurrentUser } from './user.decorator';
+import { inputUserUpdate } from './inputs/userUpdate.input';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Resolver((of) => UserEntity)
 export class UserResolver {
@@ -26,6 +28,26 @@ export class UserResolver {
 
   @Mutation(() => CreateUserDto)
   async createUser(@Args('data') data: inputUser) {
+    const user = await this.userService.getUserByEmail(data.email);
+    if (user) {
+      throw new Error('E-mail já registrado.');
+    }
+
     return this.userService.createUser(data);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => UpdateUserDto)
+  async updateUser(
+    @Args('data') data: inputUserUpdate,
+    @CurrentUser() user: UserEntity,
+  ) {
+    const emailExists = await this.userService.getUserByEmail(data.email);
+
+    if (emailExists && user.id !== emailExists.id) {
+      throw new Error('E-mail já registrado.');
+    }
+
+    return this.userService.updateUser({ ...data, id: user.id });
   }
 }
