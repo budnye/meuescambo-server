@@ -8,6 +8,12 @@ type CreateUserDto {
   email: String!
 }
 
+type UpdateUserDto {
+  id: String!
+  name: String!
+  email: String!
+}
+
 type LoginAuthDto {
   token: String!
 }
@@ -19,6 +25,7 @@ type Query {
 
 type Mutation {
   createUser(data: inputUser!): CreateUserDto!
+  updateUser(data: inputUserUpdate!): UpdateUserDto!
   login(data: inputAuth!): LoginAuthDto!
 }
 
@@ -26,6 +33,12 @@ input inputUser {
   name: String!
   email: String!
   password: String!
+}
+
+input inputUserUpdate {
+  name: String
+  email: String
+  password: String
 }
 
 input inputAuth {

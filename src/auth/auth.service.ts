@@ -15,12 +15,16 @@ export class AuthService {
   ) {}
 
   async validate(data: inputAuth): Promise<UserEntity> {
+    console.log(data);
+
     const user = await this.userService.getUserByEmail(data.email);
+
+    if (!user) throw new UnauthorizedException('Usuário ou senha inválido');
+
     const validPassword = compareSync(data.password, user.password);
 
-    if (!validPassword) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    if (!validPassword)
+      throw new UnauthorizedException('Usuário ou senha inválido');
 
     return user;
   }

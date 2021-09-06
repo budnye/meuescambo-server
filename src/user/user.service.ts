@@ -4,6 +4,8 @@ import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Context } from '@nestjs/graphql';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { getManager } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -21,6 +23,12 @@ export class UserService {
     await this.UserRepository.save(user);
 
     return user;
+  }
+
+  async updateUser(data: UpdateUserDto): Promise<UserEntity> {
+    await UserEntity.update(data.id, data);
+
+    return await UserEntity.findOne(data.id);
   }
 
   async getUsers() {
