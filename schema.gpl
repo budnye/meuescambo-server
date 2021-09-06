@@ -36,9 +36,9 @@ input inputUser {
 }
 
 input inputUserUpdate {
-  name: String!
-  email: String!
-  password: String!
+  name: String
+  email: String
+  password: String
 }
 
 input inputAuth {
