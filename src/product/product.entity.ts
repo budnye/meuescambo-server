@@ -1,7 +1,7 @@
+import { CategoryEntity } from 'src/category/category.entity';
 import { DislikedEntity } from 'src/disliked/disliked.entity';
 import { LikedEntity } from 'src/liked/liked.entity';
-import { ProductEntity } from 'src/product/product.entity';
-import { hashPasswordTransform } from 'src/utils/crypto';
+import { UserEntity } from 'src/user/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,24 +11,30 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
-@Entity('user')
-export class UserEntity extends BaseEntity {
+@Entity('product')
+export class ProductEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid') id: string;
 
-  @Column('varchar', { length: 90, nullable: false })
+  @Column('varchar', { length: 120, nullable: false })
   name: string;
 
-  @Column('varchar', { length: 90, unique: true })
-  email: string;
+  @Column('varchar', { length: 200, nullable: true })
+  description: string;
 
-  @Column({ transformer: hashPasswordTransform })
-  password: string;
+  @Column('varchar', { length: 200, nullable: true })
+  image_url: string;
 
-  @Column('varchar', { length: 10, nullable: true })
-  avatar: string;
+  @ManyToMany(() => CategoryEntity, (category) => category.id, {
+    cascade: true,
+  })
+  @JoinTable()
+  categories: CategoryEntity[];
+
+  @ManyToOne(() => UserEntity, (user) => user.products)
+  user: UserEntity;
 
   @ManyToMany(() => LikedEntity, (liked) => liked.product.id)
   @JoinTable()
@@ -37,9 +43,6 @@ export class UserEntity extends BaseEntity {
   @ManyToMany(() => DislikedEntity, (disliked) => disliked.product.id)
   @JoinTable()
   dislikes: DislikedEntity[];
-
-  @OneToMany(() => ProductEntity, (product) => product.user)
-  products: ProductEntity[];
 
   @Column('boolean', { default: true })
   isActive: boolean;

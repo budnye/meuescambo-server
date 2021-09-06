@@ -13,7 +13,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  // @UseGuards(GqlAuthGuard)
   @Query(() => [CreateUserDto])
   async getUsers() {
     return this.userService.getUsers();
