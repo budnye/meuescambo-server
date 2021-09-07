@@ -1,4 +1,5 @@
 import { Field, ObjectType, HideField } from '@nestjs/graphql';
+import { ProductEntity } from 'src/product/product.entity';
 
 @ObjectType()
 export class CreateUserDto {

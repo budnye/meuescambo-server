@@ -3,9 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Context } from '@nestjs/graphql';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { getManager } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -37,6 +35,12 @@ export class UserService {
 
   async getUserByEmail(email: string): Promise<UserEntity> {
     const user = await this.UserRepository.findOne({ email: email });
+
+    return user;
+  }
+
+  async getUserById(id: string): Promise<UserEntity> {
+    const user = await this.UserRepository.findOne(id);
 
     return user;
   }

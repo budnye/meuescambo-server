@@ -18,9 +18,31 @@ type LoginAuthDto {
   token: String!
 }
 
+type CreateProductDto {
+  id: String!
+  name: String!
+  description: String!
+  image_url: String!
+  user: CreateUserDto!
+}
+
+type CreateCategoryDto {
+  id: String!
+  name: String!
+  description: String!
+  image_url: String!
+}
+
 type Query {
   getUsers: [CreateUserDto!]!
   getUser: CreateUserDto!
+  products: [CreateProductDto!]!
+  product(data: inputGetproduct!): CreateProductDto!
+  categories: [CreateCategoryDto!]!
+}
+
+input inputGetproduct {
+  id: String!
 }
 
 type Mutation {
