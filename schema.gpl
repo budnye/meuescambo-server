@@ -18,19 +18,20 @@ type LoginAuthDto {
   token: String!
 }
 
+type CreateCategoryDto {
+  id: String!
+  name: String!
+  description: String!
+  image_url: String!
+}
+
 type CreateProductDto {
   id: String!
   name: String!
   description: String!
   image_url: String!
   user: CreateUserDto!
-}
-
-type CreateCategoryDto {
-  id: String!
-  name: String!
-  description: String!
-  image_url: String!
+  categories: [CreateCategoryDto!]!
 }
 
 type Query {

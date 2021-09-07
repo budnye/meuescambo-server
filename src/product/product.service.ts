@@ -12,7 +12,7 @@ export class ProductService {
 
   async getProducts(): Promise<ProductEntity[]> {
     const products = await this.ProductRepository.find({
-      relations: ['user'],
+      relations: ['user', 'categories'],
     });
 
     return products;
