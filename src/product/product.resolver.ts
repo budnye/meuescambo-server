@@ -27,9 +27,10 @@ export class ProductResolver {
     private readonly categoryService: CategoryService,
   ) {}
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [CreateProductDto])
-  async products() {
-    return this.productService.getProducts();
+  async products(@CurrentUser() user: UserEntity) {
+    return this.productService.getProducts(user.id);
   }
 
   @Query(() => CreateProductDto)
@@ -49,7 +50,6 @@ export class ProductResolver {
     const categories = await this.categoryService.getCategoriesArray(
       data.categories,
     );
-    console.log(user);
 
     const sendData = {
       name,

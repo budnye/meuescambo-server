@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { inputProduct } from './inputs/create-product.input';
 import { ProductEntity } from './product.entity';
@@ -12,11 +12,11 @@ export class ProductService {
     private readonly ProductRepository: Repository<ProductEntity>,
   ) {}
 
-  async getProducts(): Promise<ProductEntity[]> {
+  async getProducts(userId: string): Promise<ProductEntity[]> {
     const products = await this.ProductRepository.find({
+      where: { user: Not(userId) },
       relations: ['user', 'categories'],
     });
-    console.log(products);
 
     return products;
   }
@@ -35,6 +35,4 @@ export class ProductService {
 
     return await this.ProductRepository.save(product);
   }
-
-  //createProduct
 }
