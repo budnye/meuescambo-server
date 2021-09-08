@@ -50,6 +50,7 @@ type Mutation {
   createUser(data: inputUser!): CreateUserDto!
   updateUser(data: inputUserUpdate!): UpdateUserDto!
   login(data: inputAuth!): LoginAuthDto!
+  createProduct(data: inputProduct!): CreateProductDto!
 }
 
 input inputUser {
@@ -67,4 +68,11 @@ input inputUserUpdate {
 input inputAuth {
   email: String!
   password: String!
+}
+
+input inputProduct {
+  name: String!
+  description: String!
+  image_url: String!
+  categories: [String!]!
 }

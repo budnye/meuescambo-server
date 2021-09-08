@@ -13,4 +13,10 @@ export class CategoryService {
   async getCategories(): Promise<CategoryEntity[]> {
     return await this.CategoryRepository.createQueryBuilder().getMany();
   }
+
+  async getCategoriesArray(categories: string[]): Promise<CategoryEntity[]> {
+    return await this.CategoryRepository.createQueryBuilder('category')
+      .where('category.id IN (:...ids)', { ids: categories })
+      .getMany();
+  }
 }
