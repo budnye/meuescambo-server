@@ -1,3 +1,4 @@
+import { ProductEntity } from 'src/product/product.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,6 +6,7 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity('category')
@@ -22,6 +24,9 @@ export class CategoryEntity extends BaseEntity {
 
   @Column('boolean', { default: true })
   isActive: boolean;
+
+  @ManyToMany(() => ProductEntity, (product) => product.categories)
+  products: ProductEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
