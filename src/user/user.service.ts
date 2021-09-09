@@ -4,6 +4,7 @@ import { UserEntity } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ProductEntity } from 'src/product/product.entity';
 
 @Injectable()
 export class UserService {
@@ -50,4 +51,12 @@ export class UserService {
 
     return user;
   }
+
+  // async getProductsFeed(userId: string): Promise<ProductEntity[]> {
+  //   const user = await this.UserRepository.createQueryBuilder('user')
+  //     .leftJoinAndSelect('user.likes', 'likes')
+  //     .leftJoinAndSelect('likes.product', 'product')
+  //     .getMany();
+  //   return user.likes.products;
+  // }
 }

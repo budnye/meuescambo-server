@@ -13,6 +13,8 @@ import {
   JoinTable,
   ManyToOne,
   JoinColumn,
+  OneToOne,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('product')
@@ -28,7 +30,7 @@ export class ProductEntity extends BaseEntity {
   @Column('varchar', { length: 200, nullable: true })
   image_url: string;
 
-  @ManyToMany(() => CategoryEntity, (category) => category.id, {
+  @ManyToMany(() => CategoryEntity, (category) => category.products, {
     cascade: true,
   })
   @JoinTable()
@@ -38,12 +40,10 @@ export class ProductEntity extends BaseEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @ManyToMany(() => LikedEntity, (liked) => liked.product.id)
-  @JoinTable()
+  @OneToMany(() => LikedEntity, (likes) => likes.product)
   likes: LikedEntity[];
 
-  @ManyToMany(() => DislikedEntity, (disliked) => disliked.product.id)
-  @JoinTable()
+  @OneToMany(() => DislikedEntity, (disliked) => disliked.product)
   dislikes: DislikedEntity[];
 
   @Column('boolean', { default: true })
