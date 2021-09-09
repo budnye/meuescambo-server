@@ -23,6 +23,13 @@ type CreateCategoryDto {
   name: String!
   description: String!
   image_url: String!
+  products: [CreateProductDto!]!
+}
+
+type CreateDislikeDto {
+  id: String!
+  user: CreateUserDto!
+  product: CreateProductDto!
 }
 
 type CreateProductDto {
@@ -30,14 +37,26 @@ type CreateProductDto {
   name: String!
   description: String!
   image_url: String!
+  isActive: Boolean!
   user: CreateUserDto!
   categories: [CreateCategoryDto!]!
+  likes: CreateLikeDto!
+  dislikes: CreateDislikeDto!
+  likedByUser: Float!
+  dislikedByUser: Float!
+}
+
+type CreateLikeDto {
+  id: String!
+  user: CreateUserDto!
+  product: CreateProductDto!
 }
 
 type Query {
   getUsers: [CreateUserDto!]!
   getUser: CreateUserDto!
   products: [CreateProductDto!]!
+  userProducts: [CreateProductDto!]!
   product(data: inputGetproduct!): CreateProductDto!
   categories: [CreateCategoryDto!]!
 }
@@ -51,6 +70,8 @@ type Mutation {
   updateUser(data: inputUserUpdate!): UpdateUserDto!
   login(data: inputAuth!): LoginAuthDto!
   createProduct(data: inputProduct!): CreateProductDto!
+  likeProduct(data: inputGetproduct!): [CreateLikeDto!]!
+  dislikeProduct(data: inputGetproduct!): [CreateDislikeDto!]!
 }
 
 input inputUser {

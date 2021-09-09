@@ -30,14 +30,6 @@ export class UserEntity extends BaseEntity {
   @Column('varchar', { length: 10, nullable: true })
   avatar: string;
 
-  @ManyToMany(() => LikedEntity, (liked) => liked.product.id)
-  @JoinTable()
-  likes: LikedEntity[];
-
-  @ManyToMany(() => DislikedEntity, (disliked) => disliked.product.id)
-  @JoinTable()
-  dislikes: DislikedEntity[];
-
   @OneToMany(() => ProductEntity, (product) => product.user)
   products: ProductEntity[];
 
