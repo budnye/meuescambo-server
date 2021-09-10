@@ -15,6 +15,7 @@ import { ProductEntity } from './product.entity';
 import { ProductService } from './product.service';
 import { DislikedService } from 'src/disliked/disliked.service';
 import { CreateDislikeDto } from 'src/disliked/dto/create-dislike.dto';
+import { inputProductUpdate } from './inputs/update-product.input';
 
 @Resolver((of) => ProductEntity)
 export class ProductResolver {
@@ -65,6 +66,38 @@ export class ProductResolver {
     };
 
     return this.productService.createProduct(sendData);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => CreateProductDto)
+  async updateProduct(
+    @Args('data') data: inputProductUpdate,
+    @CurrentUser() user: UserEntity,
+  ) {
+    const { name, description, image_url, categories } = data;
+    let categoriesArray = null;
+
+    const isOwner = await this.productService.isProductOwner(data.id, user.id);
+
+    if (!isOwner) {
+      throw new Error('You are not the owner of this product');
+    }
+
+    if (categories) {
+      categoriesArray = await this.categoryService.getCategoriesArray(
+        data.categories,
+      );
+    }
+
+    const sendData = {
+      id: data.id,
+      name,
+      description,
+      image_url,
+      categories: categoriesArray,
+    };
+
+    return this.productService.updateProduct(sendData);
   }
 
   @UseGuards(GqlAuthGuard)
