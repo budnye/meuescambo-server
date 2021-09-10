@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { groupBy } from 'rxjs';
 import { Not, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { inputProduct } from './inputs/create-product.input';
+import { inputProductUpdate } from './inputs/update-product.input';
 import { ProductEntity } from './product.entity';
 
 @Injectable()
@@ -34,27 +36,22 @@ export class ProductService {
         (qb) => qb.andWhere('dislikes.user = :userId', { userId }),
       )
       .getMany();
-    console.log(products);
-    console.log(userId);
 
     return products;
   }
 
   async getUserProducts(userId: string): Promise<ProductEntity[]> {
-    const products = await this.ProductRepository.find({
+    return await this.ProductRepository.find({
       where: {
         user: userId,
         isActive: true,
       },
       relations: ['user', 'categories', 'likes'],
     });
-    console.log(products);
-
-    return products;
   }
 
   async getProduct(id: string): Promise<ProductEntity> {
-    const product = await this.ProductRepository.createQueryBuilder('product')
+    return await this.ProductRepository.createQueryBuilder('product')
       .leftJoin('product.likes', 'likes')
       .leftJoin('product.dislikes', 'dislikes')
       .leftJoinAndSelect('product.categories', 'categories')
@@ -74,9 +71,6 @@ export class ProductService {
         (qb) => qb.andWhere('dislikes.product = :id', { id }),
       )
       .getOne();
-    console.log(product);
-
-    return product;
   }
 
   async createProduct(data: CreateProductDto): Promise<ProductEntity> {
@@ -88,5 +82,25 @@ export class ProductService {
     product.user = data.user;
 
     return await this.ProductRepository.save(product);
+  }
+
+  async updateProduct(data: UpdateProductDto): Promise<ProductEntity> {
+    const product = await this.ProductRepository.findOne(data.id);
+    product.name = data.name;
+    product.description = data.description;
+    product.image_url = data.image_url;
+    product.categories = data.categories;
+    product.save();
+
+    return product;
+  }
+
+  async isProductOwner(productId: string, userId: string): Promise<boolean> {
+    return !!(await this.ProductRepository.findOne(productId, {
+      relations: ['user'],
+      where: {
+        user: { id: userId },
+      },
+    }));
   }
 }

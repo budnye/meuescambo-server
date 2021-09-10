@@ -70,6 +70,7 @@ type Mutation {
   updateUser(data: inputUserUpdate!): UpdateUserDto!
   login(data: inputAuth!): LoginAuthDto!
   createProduct(data: inputProduct!): CreateProductDto!
+  updateProduct(data: inputProductUpdate!): CreateProductDto!
   likeProduct(data: inputGetproduct!): [CreateLikeDto!]!
   dislikeProduct(data: inputGetproduct!): [CreateDislikeDto!]!
 }
@@ -96,4 +97,12 @@ input inputProduct {
   description: String!
   image_url: String!
   categories: [String!]!
+}
+
+input inputProductUpdate {
+  id: String!
+  name: String
+  description: String
+  image_url: String
+  categories: [String!]
 }
